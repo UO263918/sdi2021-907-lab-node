@@ -57,6 +57,7 @@ routerUsuarioAutor.use(function(req, res, next) {
                 res.redirect("/tienda");
             }
         })
+
 });
 //Aplicar routerUsuarioAutor
 app.use("/cancion/modificar",routerUsuarioAutor);
