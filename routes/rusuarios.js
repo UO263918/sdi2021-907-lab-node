@@ -23,6 +23,7 @@ module.exports = function(app, swig, gestorBD) {
                 res.redirect("/identificarse");
             }
         });
+
     });
 
     app.get("/identificarse", function(req, res) {
