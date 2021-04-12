@@ -131,6 +131,7 @@ module.exports = function(app, swig, gestorBD) {
     });
 
     app.get('/cancion/:id', function (req, res) {
+        let autor = false;
         let criterioCacnion  = {"_id": gestorBD.mongo.ObjectID(req.params.id)};
         let criterioParaBusquedaDeComentarios= { "cancion_id" : gestorBD.mongo.ObjectID(req.params.id) };
         gestorBD.obtenerCanciones(criterioCacnion, function (canciones) {
@@ -141,9 +142,14 @@ module.exports = function(app, swig, gestorBD) {
                     if(comentarios == null){
                         res.send("Error al obtener los comentarios");
                     }
+
+                    if (canciones[0].autor == req.session.usuario){
+                        author = true;
+                    }
                     let respuesta = swig.renderFile('views/bcancion.html',{
                         cancion: canciones[0],
-                        comentarios: comentarios
+                        comentarios: comentarios,
+                        author : author
                     });
                     res.send(respuesta);
                 })
@@ -254,7 +260,12 @@ module.exports = function(app, swig, gestorBD) {
             if ( idCompra == null ){
                 res.send(respuesta);
             } else {
-                res.redirect("/compras");
+                if(canciones[0].autor == req.session.usuario){
+                    res.send("Error al comprar ya que no puedes comprar una cancion propia");
+                }else{
+                    res.redirect("/compras");
+                }
+
             }
         });
     });

@@ -130,3 +130,13 @@ https.createServer({
 }, app).listen(app.get('port'), function() {
     console.log("Servidor activo");
 });
+
+app.get('/error/:err',function(req, res){
+    let error =  req.params.err;
+    console.log(error);
+    let respuesta = swig.renderFile('views/error.html',
+        {
+            error : error
+        });
+    res.send(respuesta);
+});
